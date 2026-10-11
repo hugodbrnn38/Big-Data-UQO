@@ -1,0 +1,132 @@
+name: inf6303-devoir1
+
+services:
+  notebook:
+    build:
+      context: .
+      dockerfile: docker/notebook.Dockerfile
+    ports:
+      - "8888:8888"
+    environment:
+      JUPYTER_TOKEN: inf6303
+      HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
+    volumes:
+      - ./workspace:/home/jovyan/work
+      - ./data:/home/jovyan/data:ro
+      - ./hadoop-config:/opt/hadoop/etc/hadoop:ro
+    networks: [inf6303]
+
+  namenode:
+    image: apache/hadoop:3.4.3
+    profiles: [hadoop]
+    hostname: namenode
+    user: "0:0"
+    command: ["bash", "-lc", "if [ ! -d /data/dfs/name/current ]; then hdfs namenode -format -force -nonInteractive; fi; exec hdfs namenode"]
+    ports:
+      - "9870:9870"
+      - "9000:9000"
+    volumes:
+      - namenode-data:/data/dfs/name
+      - ./hadoop-config:/opt/hadoop/etc/hadoop:ro
+    networks: [inf6303]
+
+  datanode:
+    image: apache/hadoop:3.4.3
+    profiles: [hadoop]
+    hostname: datanode
+    user: "0:0"
+    command: ["hdfs", "datanode"]
+    depends_on: [namenode]
+    ports:
+      - "9864:9864"
+    volumes:
+      - datanode-data:/data/dfs/data
+      - ./hadoop-config:/opt/hadoop/etc/hadoop:ro
+    networks: [inf6303]
+
+  resourcemanager:
+    image: apache/hadoop:3.4.3
+    profiles: [hadoop]
+    hostname: resourcemanager
+    user: "0:0"
+    command: ["yarn", "resourcemanager"]
+    depends_on: [namenode]
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./hadoop-config:/opt/hadoop/etc/hadoop:ro
+    networks: [inf6303]
+
+  nodemanager:
+    image: apache/hadoop:3.4.3
+    profiles: [hadoop]
+    hostname: nodemanager
+    user: "0:0"
+    command: ["yarn", "nodemanager"]
+    depends_on: [resourcemanager, datanode]
+    ports:
+      - "8042:8042"
+    volumes:
+      - ./hadoop-config:/opt/hadoop/etc/hadoop:ro
+    networks: [inf6303]
+
+  hive:
+    image: apache/hive:4.0.0
+    profiles: [hadoop]
+    hostname: hive
+    environment:
+      SERVICE_NAME: hiveserver2
+      HIVE_SERVER2_THRIFT_PORT: 10000
+      HIVE_SERVER2_WEBUI_PORT: 10002
+    depends_on: [namenode, datanode]
+    ports:
+      - "10000:10000"
+      - "10002:10002"
+    volumes:
+      - ./hadoop-config:/opt/hadoop/etc/hadoop:ro
+      - ./hive-config/hive-site.xml:/opt/hive/conf/hive-site.xml:ro
+      - hive-data:/opt/hive/data
+    networks: [inf6303]
+
+  mongo:
+    image: mongo:8.0.30-noble
+    profiles: [nosql]
+    hostname: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: inf6303
+      MONGO_INITDB_ROOT_PASSWORD: inf6303
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks: [inf6303]
+
+  cassandra:
+    image: cassandra:5.0.9
+    profiles: [nosql]
+    hostname: cassandra
+    environment:
+      CASSANDRA_CLUSTER_NAME: INF6303
+      MAX_HEAP_SIZE: 1024M
+      HEAP_NEWSIZE: 256M
+    ports:
+      - "9042:9042"
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'DESCRIBE CLUSTER' || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 15
+      start_period: 60s
+    networks: [inf6303]
+
+networks:
+  inf6303:
+
+volumes:
+  namenode-data:
+  datanode-data:
+  hive-data:
+  mongo-data:
+  cassandra-data:

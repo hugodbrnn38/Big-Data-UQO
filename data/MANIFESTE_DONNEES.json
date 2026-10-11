@@ -1,0 +1,77 @@
+{
+  "seed": 6303,
+  "events": 1000000,
+  "users": 50000,
+  "contents": 2000,
+  "event_partitions": 8,
+  "period": [
+    "2026-01-01",
+    "2026-06-29"
+  ],
+  "expected": {
+    "events_by_country": {
+      "Canada": 311247,
+      "Senegal": 132617,
+      "Cote_d_Ivoire": 119916,
+      "France": 118790,
+      "Maroc": 98758,
+      "Cameroun": 89530,
+      "Belgique": 69962,
+      "Tunisie": 59180
+    },
+    "events_by_type": {
+      "lecture": 549714,
+      "pause": 139884,
+      "recherche": 119987,
+      "abandon": 110611,
+      "ajout_favori": 79804
+    },
+    "top_content_by_watch": [
+      [
+        "c00545",
+        1226712
+      ],
+      [
+        "c01844",
+        1221503
+      ],
+      [
+        "c00686",
+        1216833
+      ],
+      [
+        "c00277",
+        1210971
+      ],
+      [
+        "c00553",
+        1204604
+      ],
+      [
+        "c01825",
+        1201793
+      ],
+      [
+        "c00882",
+        1200490
+      ],
+      [
+        "c00912",
+        1199344
+      ],
+      [
+        "c01263",
+        1198489
+      ],
+      [
+        "c01769",
+        1198083
+      ]
+    ],
+    "segments": {
+      "actif": 30901,
+      "intensif": 7430,
+      "occasionnel": 11669
+    }
+  }
+}
