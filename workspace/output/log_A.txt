@@ -1,0 +1,751 @@
+WARNING: log4j.properties is not found. HADOOP_CONF_DIR may be incomplete.
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.18.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop/share/hadoop/common/lib/slf4j-reload4j-1.7.36.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+WARNING: log4j.properties is not found. HADOOP_CONF_DIR may be incomplete.
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.18.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop/share/hadoop/common/lib/slf4j-reload4j-1.7.36.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Connecting to jdbc:hive2://hive:10000/default
+Connected to: Apache Hive (version 4.0.0)
+Driver: Hive JDBC (version 4.0.0)
+Transaction isolation: TRANSACTION_REPEATABLE_READ
+0: jdbc:hive2://hive:10000/default> -- DEVOIR 1 - Partie A : Hive/HiveQL
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- Complétez les zones TODO. Ne modifiez pas les chemins imposés.
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> CREATE DATABASE IF NOT EXISTS inf6303_devoir1;
+INFO  : Compiling command(queryId=hive_20261010151728_6e704bac-9c0c-4061-a9e5-721383d7ec49): CREATE DATABASE IF NOT EXISTS inf6303_devoir1
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:null, properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151728_6e704bac-9c0c-4061-a9e5-721383d7ec49); Time taken: 0.342 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151728_6e704bac-9c0c-4061-a9e5-721383d7ec49): CREATE DATABASE IF NOT EXISTS inf6303_devoir1
+INFO  : Starting task [Stage-0:DDL] in serial mode
+INFO  : Completed executing command(queryId=hive_20261010151728_6e704bac-9c0c-4061-a9e5-721383d7ec49); Time taken: 0.21 seconds
+No rows affected (1.01 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> USE inf6303_devoir1;
+INFO  : Compiling command(queryId=hive_20261010151729_7ddcd3bc-1e68-4179-a67a-22b3ba724f3b): USE inf6303_devoir1
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:null, properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151729_7ddcd3bc-1e68-4179-a67a-22b3ba724f3b); Time taken: 0.017 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151729_7ddcd3bc-1e68-4179-a67a-22b3ba724f3b): USE inf6303_devoir1
+INFO  : Starting task [Stage-0:DDL] in serial mode
+INFO  : Completed executing command(queryId=hive_20261010151729_7ddcd3bc-1e68-4179-a67a-22b3ba724f3b); Time taken: 0.023 seconds
+No rows affected (0.063 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- ---------------------------------------------------------------------
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- Paramètres d'exécution (ajoutés par l'équipe, voir README_EQUIPE.md)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- * MapReduce local : ResourceManager/NodeManager s'arrêtent (Exited 255,
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --   mémoire Docker limitée) et les jobs restaient bloqués à la soumission.
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --   Le résultat est identique ; seul le lieu d'exécution change.
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- * Pas de map-join automatique : sa tâche locale (MapredLocalTask)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --   dépasse la mémoire du conteneur Hive (-Xmx1G).
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- * HiveInputFormat : avec CombineHiveInputFormat (défaut), les 8 en-têtes
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --   n'étaient pas ignorés => COUNT(*) = 1 000 008 au lieu de 1 000 000.
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- ---------------------------------------------------------------------
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> SET mapreduce.framework.name=local;
+No rows affected (0.014 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> SET hive.exec.mode.local.auto=false;
+No rows affected (0.015 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> SET hive.auto.convert.join=false;
+No rows affected (0.027 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> SET hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
+No rows affected (0.016 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- TODO A1 : table externe evenements_massifs (10 colonnes)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- LOCATION '/inf6303/devoir1/evenements'
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- Ordre vérifié sur l'en-tête réel des fichiers :
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --   event_id,user_id,content_id,event_type,event_ts,country,device,
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --   watch_seconds,quality,session_id
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- EXTERNAL : DROP supprime seulement la définition, jamais les fichiers HDFS.
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- On recrée pour garantir le schéma (IF NOT EXISTS garderait une ancienne
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- définition sans prévenir).
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> DROP TABLE IF EXISTS evenements_massifs;
+INFO  : Compiling command(queryId=hive_20261010151731_b609b06c-78d0-428f-bc93-307313213924): DROP TABLE IF EXISTS evenements_massifs
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:null, properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151731_b609b06c-78d0-428f-bc93-307313213924); Time taken: 0.467 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151731_b609b06c-78d0-428f-bc93-307313213924): DROP TABLE IF EXISTS evenements_massifs
+INFO  : Starting task [Stage-0:DDL] in serial mode
+INFO  : Completed executing command(queryId=hive_20261010151731_b609b06c-78d0-428f-bc93-307313213924); Time taken: 0.368 seconds
+No rows affected (0.853 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> CREATE EXTERNAL TABLE evenements_massifs (
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   event_id      STRING,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   user_id       STRING,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   content_id    STRING,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   event_type    STRING,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   event_ts      STRING,   -- format ISO 2026-02-05T20:47:15 (avec 'T')
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   country       STRING,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   device        STRING,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   watch_seconds INT,      -- valeur non numérique => NULL (détectée en A3)
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   quality       STRING,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   session_id    STRING
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > )
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > STORED AS TEXTFILE
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > LOCATION '/inf6303/devoir1/evenements'
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > TBLPROPERTIES ('skip.header.line.count'='1');
+INFO  : Compiling command(queryId=hive_20261010151732_88ee415a-7de2-486e-b337-fda8863d426c): CREATE EXTERNAL TABLE evenements_massifs (
+event_id      STRING,
+user_id       STRING,
+content_id    STRING,
+event_type    STRING,
+event_ts      STRING,
+country       STRING,
+device        STRING,
+watch_seconds INT,
+quality       STRING,
+session_id    STRING
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/inf6303/devoir1/evenements'
+TBLPROPERTIES ('skip.header.line.count'='1')
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:null, properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151732_88ee415a-7de2-486e-b337-fda8863d426c); Time taken: 0.052 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151732_88ee415a-7de2-486e-b337-fda8863d426c): CREATE EXTERNAL TABLE evenements_massifs (
+event_id      STRING,
+user_id       STRING,
+content_id    STRING,
+event_type    STRING,
+event_ts      STRING,
+country       STRING,
+device        STRING,
+watch_seconds INT,
+quality       STRING,
+session_id    STRING
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/inf6303/devoir1/evenements'
+TBLPROPERTIES ('skip.header.line.count'='1')
+INFO  : Starting task [Stage-0:DDL] in serial mode
+INFO  : Completed executing command(queryId=hive_20261010151732_88ee415a-7de2-486e-b337-fda8863d426c); Time taken: 0.185 seconds
+No rows affected (0.251 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- TODO A2 : table externe catalogue_contenus (5 colonnes)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- LOCATION '/inf6303/devoir1/catalogue'
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- [Mikael] Vérifier l'en-tête : head -3 /home/jovyan/data/catalogue_contenus.csv
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- DROP TABLE IF EXISTS catalogue_contenus;
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- CREATE EXTERNAL TABLE catalogue_contenus ( ... 5 colonnes ... )
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- STORED AS TEXTFILE
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- LOCATION '/inf6303/devoir1/catalogue'
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- TBLPROPERTIES ('skip.header.line.count'='1');
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- TODO A3 : contrôles de qualité et analyses demandées dans l'énoncé.
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- [Mikael] À compléter : COUNT(*) catalogue = 2 000 ; répartition par pays
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- et par type ; top 10 contenus par durée totale (jointure catalogue) ;
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- durée moyenne par appareil et qualité ; EXPLAIN d'une requête.
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- Volume des événements (attendu : 1 000 000)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> SELECT COUNT(*) AS nb_evenements FROM evenements_massifs;
+INFO  : Compiling command(queryId=hive_20261010151733_8a561389-e268-4c4c-ab0c-08c1c7ebb2f2): SELECT COUNT(*) AS nb_evenements FROM evenements_massifs
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:[FieldSchema(name:nb_evenements, type:bigint, comment:null)], properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151733_8a561389-e268-4c4c-ab0c-08c1c7ebb2f2); Time taken: 0.974 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151733_8a561389-e268-4c4c-ab0c-08c1c7ebb2f2): SELECT COUNT(*) AS nb_evenements FROM evenements_massifs
+WARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. tez) or using Hive 1.X releases.
+INFO  : Query ID = hive_20261010151733_8a561389-e268-4c4c-ab0c-08c1c7ebb2f2
+INFO  : Total jobs = 1
+INFO  : Launching Job 1 out of 1
+INFO  : Starting task [Stage-1:MAPRED] in serial mode
+INFO  : Number of reduce tasks determined at compile time: 1
+INFO  : In order to change the average load for a reducer (in bytes):
+INFO  :   set hive.exec.reducers.bytes.per.reducer=<number>
+INFO  : In order to limit the maximum number of reducers:
+INFO  :   set hive.exec.reducers.max=<number>
+INFO  : In order to set a constant number of reducers:
+INFO  :   set mapreduce.job.reduces=<number>
+INFO  : number of splits:8
+INFO  : Submitting tokens for job: job_local145181873_0037
+INFO  : Executing with tokens: []
+INFO  : The url to track the job: http://localhost:8080/
+INFO  : Job running in-process (local Hadoop)
+INFO  : 2026-10-10 15:17:39,357 Stage-1 map = 0%,  reduce = 0%
+INFO  : 2026-10-10 15:17:40,543 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.39 sec
+INFO  : 2026-10-10 15:17:44,551 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 9.63 sec
+INFO  : MapReduce Total cumulative CPU time: 9 seconds 630 msec
+INFO  : Ended Job = job_local145181873_0037
+INFO  : MapReduce Jobs Launched: 
+INFO  : Stage-Stage-1:  Cumulative CPU: 9.63 sec   HDFS Read: 4196220131 HDFS Write: 60020000 HDFS EC Read: 0 SUCCESS
+INFO  : Total MapReduce CPU Time Spent: 9 seconds 630 msec
+INFO  : Completed executing command(queryId=hive_20261010151733_8a561389-e268-4c4c-ab0c-08c1c7ebb2f2); Time taken: 10.617 seconds
++----------------+
+| nb_evenements  |
++----------------+
+| 1000000        |
++----------------+
+1 row selected (11.702 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- Identifiants et durées invalides
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> SELECT
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   SUM(CASE WHEN user_id IS NULL OR TRIM(user_id) = '' THEN 1 ELSE 0 END) AS user_id_invalide,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   SUM(CASE WHEN watch_seconds IS NULL                  THEN 1 ELSE 0 END) AS duree_nulle_ou_non_numer ique,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   SUM(CASE WHEN watch_seconds < 0                      THEN 1 ELSE 0 END) AS duree_negative
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > FROM evenements_massifs;
+INFO  : Compiling command(queryId=hive_20261010151744_cf66439a-f427-4d19-ae0a-46ac1632b891): SELECT
+SUM(CASE WHEN user_id IS NULL OR TRIM(user_id) = '' THEN 1 ELSE 0 END) AS user_id_invalide,
+SUM(CASE WHEN watch_seconds IS NULL                  THEN 1 ELSE 0 END) AS duree_nulle_ou_non_numerique,
+SUM(CASE WHEN watch_seconds < 0                      THEN 1 ELSE 0 END) AS duree_negative
+FROM evenements_massifs
+INFO  : No Stats for inf6303_devoir1@evenements_massifs, Columns: user_id, watch_seconds
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:[FieldSchema(name:user_id_invalide, type:bigint, comment:null), FieldSchema(name:duree_nulle_ou_non_numerique, type:bigint, comment:null), FieldSchema(name:duree_negative, type:bigint, comment:null)], properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151744_cf66439a-f427-4d19-ae0a-46ac1632b891); Time taken: 0.448 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151744_cf66439a-f427-4d19-ae0a-46ac1632b891): SELECT
+SUM(CASE WHEN user_id IS NULL OR TRIM(user_id) = '' THEN 1 ELSE 0 END) AS user_id_invalide,
+SUM(CASE WHEN watch_seconds IS NULL                  THEN 1 ELSE 0 END) AS duree_nulle_ou_non_numerique,
+SUM(CASE WHEN watch_seconds < 0                      THEN 1 ELSE 0 END) AS duree_negative
+FROM evenements_massifs
+WARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. tez) or using Hive 1.X releases.
+INFO  : Query ID = hive_20261010151744_cf66439a-f427-4d19-ae0a-46ac1632b891
+INFO  : Total jobs = 1
+INFO  : Launching Job 1 out of 1
+INFO  : Starting task [Stage-1:MAPRED] in serial mode
+INFO  : Number of reduce tasks determined at compile time: 1
+INFO  : In order to change the average load for a reducer (in bytes):
+INFO  :   set hive.exec.reducers.bytes.per.reducer=<number>
+INFO  : In order to limit the maximum number of reducers:
+INFO  :   set hive.exec.reducers.max=<number>
+INFO  : In order to set a constant number of reducers:
+INFO  :   set mapreduce.job.reduces=<number>
+INFO  : number of splits:8
+INFO  : Submitting tokens for job: job_local1798454653_0038
+INFO  : Executing with tokens: []
+INFO  : The url to track the job: http://localhost:8080/
+INFO  : Job running in-process (local Hadoop)
+INFO  : 2026-10-10 15:17:48,413 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.08 sec
+INFO  : 2026-10-10 15:17:50,428 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 2.53 sec
+INFO  : MapReduce Total cumulative CPU time: 2 seconds 530 msec
+INFO  : Ended Job = job_local1798454653_0038
+INFO  : MapReduce Jobs Launched: 
+INFO  : Stage-Stage-1:  Cumulative CPU: 2.53 sec   HDFS Read: 4416881546 HDFS Write: 60020961 HDFS EC Read: 0 SUCCESS
+INFO  : Total MapReduce CPU Time Spent: 2 seconds 530 msec
+INFO  : Completed executing command(queryId=hive_20261010151744_cf66439a-f427-4d19-ae0a-46ac1632b891); Time taken: 5.118 seconds
++-------------------+-------------------------------+-----------------+
+| user_id_invalide  | duree_nulle_ou_non_numerique  | duree_negative  |
++-------------------+-------------------------------+-----------------+
+| 0                 | 0                             | 0               |
++-------------------+-------------------------------+-----------------+
+1 row selected (5.63 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- TODO A4 : produire puis exporter un segment par utilisateur.
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- Le répertoire HDFS imposé est /inf6303/devoir1/sorties/segments
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- [Franklin]
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- A4.1 Prérequis : un utilisateur a-t-il plusieurs pays ?
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- Résultat obtenu : 0 => le pays est unique par user_id, MAX(country)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- le récupère dans la même agrégation (pas de jointure).
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> SELECT COUNT(*) AS nb_users_multi_pays
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > FROM (
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   SELECT user_id
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   FROM evenements_massifs
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   GROUP BY user_id
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   HAVING COUNT(DISTINCT country) > 1
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > ) t;
+INFO  : Compiling command(queryId=hive_20261010151750_a91d5565-e621-4e70-969e-167c3372635e): SELECT COUNT(*) AS nb_users_multi_pays
+FROM (
+SELECT user_id
+FROM evenements_massifs
+GROUP BY user_id
+HAVING COUNT(DISTINCT country) > 1
+) t
+INFO  : No Stats for inf6303_devoir1@evenements_massifs, Columns: country, user_id
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:[FieldSchema(name:nb_users_multi_pays, type:bigint, comment:null)], properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151750_a91d5565-e621-4e70-969e-167c3372635e); Time taken: 0.509 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151750_a91d5565-e621-4e70-969e-167c3372635e): SELECT COUNT(*) AS nb_users_multi_pays
+FROM (
+SELECT user_id
+FROM evenements_massifs
+GROUP BY user_id
+HAVING COUNT(DISTINCT country) > 1
+) t
+WARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. tez) or using Hive 1.X releases.
+INFO  : Query ID = hive_20261010151750_a91d5565-e621-4e70-969e-167c3372635e
+INFO  : Total jobs = 2
+INFO  : Launching Job 1 out of 2
+INFO  : Starting task [Stage-1:MAPRED] in serial mode
+INFO  : Number of reduce tasks not specified. Estimated from input data size: 1
+INFO  : In order to change the average load for a reducer (in bytes):
+INFO  :   set hive.exec.reducers.bytes.per.reducer=<number>
+INFO  : In order to limit the maximum number of reducers:
+INFO  :   set hive.exec.reducers.max=<number>
+INFO  : In order to set a constant number of reducers:
+INFO  :   set mapreduce.job.reduces=<number>
+INFO  : number of splits:8
+INFO  : Submitting tokens for job: job_local1593347280_0039
+INFO  : Executing with tokens: []
+INFO  : The url to track the job: http://localhost:8080/
+INFO  : Job running in-process (local Hadoop)
+INFO  : 2026-10-10 15:17:54,238 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 0.8 sec
+INFO  : 2026-10-10 15:18:04,941 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 41.24 sec
+INFO  : MapReduce Total cumulative CPU time: 41 seconds 240 msec
+INFO  : Ended Job = job_local1593347280_0039
+INFO  : Launching Job 2 out of 2
+INFO  : Starting task [Stage-2:MAPRED] in serial mode
+INFO  : Number of reduce tasks determined at compile time: 1
+INFO  : In order to change the average load for a reducer (in bytes):
+INFO  :   set hive.exec.reducers.bytes.per.reducer=<number>
+INFO  : In order to limit the maximum number of reducers:
+INFO  :   set hive.exec.reducers.max=<number>
+INFO  : In order to set a constant number of reducers:
+INFO  :   set mapreduce.job.reduces=<number>
+INFO  : number of splits:1
+INFO  : Submitting tokens for job: job_local261818110_0040
+INFO  : Executing with tokens: []
+INFO  : The url to track the job: http://localhost:8080/
+INFO  : Job running in-process (local Hadoop)
+INFO  : 2026-10-10 15:18:07,650 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 0.16 sec
+INFO  : MapReduce Total cumulative CPU time: 160 msec
+INFO  : Ended Job = job_local261818110_0040
+INFO  : MapReduce Jobs Launched: 
+INFO  : Stage-Stage-1:  Cumulative CPU: 41.24 sec   HDFS Read: 4637542943 HDFS Write: 60021801 HDFS EC Read: 0 SUCCESS
+INFO  : Stage-Stage-2:  Cumulative CPU: 0.16 sec   HDFS Read: 1049633148 HDFS Write: 13338279 HDFS EC Read: 0 SUCCESS
+INFO  : Total MapReduce CPU Time Spent: 41 seconds 400 msec
+INFO  : Completed executing command(queryId=hive_20261010151750_a91d5565-e621-4e70-969e-167c3372635e); Time taken: 16.288 seconds
++----------------------+
+| nb_users_multi_pays  |
++----------------------+
+| 0                    |
++----------------------+
+1 row selected (16.878 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- A4.2 Agrégation par user_id et segmentation
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- Seuils (complément du 6 octobre 2026), sur SUM(watch_seconds) seulement :
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --   intensif >= 55000 ; actif >= 30000 ; occasionnel < 30000
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- event_count est conservé mais ne sert pas au segment.
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- Format de sortie (sans en-tête) :
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --   user_id,country,event_count,total_watch_sec,segment
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> INSERT OVERWRITE DIRECTORY '/inf6303/devoir1/sorties/segments'
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > STORED AS TEXTFILE
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > SELECT
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   user_id,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   MAX(country)       AS country,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   COUNT(*)           AS event_count,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   SUM(watch_seconds) AS total_watch_sec,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   CASE
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >     WHEN SUM(watch_seconds) >= 55000 THEN 'intensif'
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >     WHEN SUM(watch_seconds) >= 30000 THEN 'actif'
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >     ELSE 'occasionnel'
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   END AS segment
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > FROM evenements_massifs
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > WHERE user_id IS NOT NULL AND TRIM(user_id) <> ''
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   AND watch_seconds IS NOT NULL AND watch_seconds >= 0
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > GROUP BY user_id;
+INFO  : Compiling command(queryId=hive_20261010151809_a8dc6df8-e9c7-4ca1-9646-a9e4f5ab5a30): INSERT OVERWRITE DIRECTORY '/inf6303/devoir1/sorties/segments'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+SELECT
+user_id,
+MAX(country)       AS country,
+COUNT(*)           AS event_count,
+SUM(watch_seconds) AS total_watch_sec,
+CASE
+WHEN SUM(watch_seconds) >= 55000 THEN 'intensif'
+WHEN SUM(watch_seconds) >= 30000 THEN 'actif'
+ELSE 'occasionnel'
+END AS segment
+FROM evenements_massifs
+WHERE user_id IS NOT NULL AND TRIM(user_id) <> ''
+AND watch_seconds IS NOT NULL AND watch_seconds >= 0
+GROUP BY user_id
+INFO  : No Stats for inf6303_devoir1@evenements_massifs, Columns: country, user_id, watch_seconds
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:[FieldSchema(name:user_id, type:string, comment:null), FieldSchema(name:country, type:string, comment:null), FieldSchema(name:event_count, type:bigint, comment:null), FieldSchema(name:total_watch_sec, type:bigint, comment:null), FieldSchema(name:segment, type:string, comment:null)], properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151809_a8dc6df8-e9c7-4ca1-9646-a9e4f5ab5a30); Time taken: 0.642 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151809_a8dc6df8-e9c7-4ca1-9646-a9e4f5ab5a30): INSERT OVERWRITE DIRECTORY '/inf6303/devoir1/sorties/segments'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+SELECT
+user_id,
+MAX(country)       AS country,
+COUNT(*)           AS event_count,
+SUM(watch_seconds) AS total_watch_sec,
+CASE
+WHEN SUM(watch_seconds) >= 55000 THEN 'intensif'
+WHEN SUM(watch_seconds) >= 30000 THEN 'actif'
+ELSE 'occasionnel'
+END AS segment
+FROM evenements_massifs
+WHERE user_id IS NOT NULL AND TRIM(user_id) <> ''
+AND watch_seconds IS NOT NULL AND watch_seconds >= 0
+GROUP BY user_id
+WARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. tez) or using Hive 1.X releases.
+INFO  : Query ID = hive_20261010151809_a8dc6df8-e9c7-4ca1-9646-a9e4f5ab5a30
+INFO  : Total jobs = 1
+INFO  : Launching Job 1 out of 1
+INFO  : Starting task [Stage-1:MAPRED] in serial mode
+INFO  : Number of reduce tasks not specified. Estimated from input data size: 1
+INFO  : In order to change the average load for a reducer (in bytes):
+INFO  :   set hive.exec.reducers.bytes.per.reducer=<number>
+INFO  : In order to limit the maximum number of reducers:
+INFO  :   set hive.exec.reducers.max=<number>
+INFO  : In order to set a constant number of reducers:
+INFO  :   set mapreduce.job.reduces=<number>
+INFO  : number of splits:8
+INFO  : Submitting tokens for job: job_local2095624841_0041
+INFO  : Executing with tokens: []
+INFO  : The url to track the job: http://localhost:8080/
+INFO  : Job running in-process (local Hadoop)
+INFO  : 2026-10-10 15:18:12,906 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.25 sec
+INFO  : 2026-10-10 15:18:18,668 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 15.39 sec
+INFO  : MapReduce Total cumulative CPU time: 15 seconds 390 msec
+INFO  : Ended Job = job_local2095624841_0041
+INFO  : Starting task [Stage-0:MOVE] in serial mode
+INFO  : Moving data to directory /inf6303/devoir1/sorties/segments from hdfs://namenode:9000/inf6303/devoir1/sorties/segments/.hive-staging_hive_2026-10-10_15-18-09_004_7278671212708145204-8/-ext-10000
+INFO  : MapReduce Jobs Launched: 
+INFO  : Stage-Stage-1:  Cumulative CPU: 15.39 sec   HDFS Read: 4858204304 HDFS Write: 61677238 HDFS EC Read: 0 SUCCESS
+INFO  : Total MapReduce CPU Time Spent: 15 seconds 390 msec
+INFO  : Completed executing command(queryId=hive_20261010151809_a8dc6df8-e9c7-4ca1-9646-a9e4f5ab5a30); Time taken: 9.073 seconds
+No rows affected (9.729 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- A4.3 Contrôles de cohérence sur la sortie
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> DROP TABLE IF EXISTS segments_sortie;
+INFO  : Compiling command(queryId=hive_20261010151818_9858d0d0-2944-4f4e-9dd1-7f3b65820df0): DROP TABLE IF EXISTS segments_sortie
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:null, properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151818_9858d0d0-2944-4f4e-9dd1-7f3b65820df0); Time taken: 0.012 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151818_9858d0d0-2944-4f4e-9dd1-7f3b65820df0): DROP TABLE IF EXISTS segments_sortie
+INFO  : Starting task [Stage-0:DDL] in serial mode
+INFO  : Completed executing command(queryId=hive_20261010151818_9858d0d0-2944-4f4e-9dd1-7f3b65820df0); Time taken: 0.142 seconds
+No rows affected (0.166 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> CREATE EXTERNAL TABLE segments_sortie (
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   user_id STRING, country STRING, event_count BIGINT,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >   total_watch_sec BIGINT, segment STRING
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > )
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > STORED AS TEXTFILE
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > LOCATION '/inf6303/devoir1/sorties/segments';
+INFO  : Compiling command(queryId=hive_20261010151819_3c1b972b-bf3e-40b4-9064-cc2bd5462fab): CREATE EXTERNAL TABLE segments_sortie (
+user_id STRING, country STRING, event_count BIGINT,
+total_watch_sec BIGINT, segment STRING
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/inf6303/devoir1/sorties/segments'
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:null, properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151819_3c1b972b-bf3e-40b4-9064-cc2bd5462fab); Time taken: 0.008 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151819_3c1b972b-bf3e-40b4-9064-cc2bd5462fab): CREATE EXTERNAL TABLE segments_sortie (
+user_id STRING, country STRING, event_count BIGINT,
+total_watch_sec BIGINT, segment STRING
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/inf6303/devoir1/sorties/segments'
+INFO  : Starting task [Stage-0:DDL] in serial mode
+INFO  : Completed executing command(queryId=hive_20261010151819_3c1b972b-bf3e-40b4-9064-cc2bd5462fab); Time taken: 0.079 seconds
+No rows affected (0.095 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- Attendu : 50 000 lignes, 50 000 user_id distincts, somme = 1 000 000
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> SELECT COUNT(*)                AS nb_users,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >        COUNT(DISTINCT user_id) AS nb_users_distincts,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >        SUM(event_count)        AS somme_evenements
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > FROM segments_sortie;
+INFO  : Compiling command(queryId=hive_20261010151819_d2b5a025-fca9-4fbe-9298-0a0ea8636ff5): SELECT COUNT(*)                AS nb_users,
+COUNT(DISTINCT user_id) AS nb_users_distincts,
+SUM(event_count)        AS somme_evenements
+FROM segments_sortie
+INFO  : No Stats for inf6303_devoir1@segments_sortie, Columns: user_id, event_count
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:[FieldSchema(name:nb_users, type:bigint, comment:null), FieldSchema(name:nb_users_distincts, type:bigint, comment:null), FieldSchema(name:somme_evenements, type:bigint, comment:null)], properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151819_d2b5a025-fca9-4fbe-9298-0a0ea8636ff5); Time taken: 0.166 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151819_d2b5a025-fca9-4fbe-9298-0a0ea8636ff5): SELECT COUNT(*)                AS nb_users,
+COUNT(DISTINCT user_id) AS nb_users_distincts,
+SUM(event_count)        AS somme_evenements
+FROM segments_sortie
+WARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. tez) or using Hive 1.X releases.
+INFO  : Query ID = hive_20261010151819_d2b5a025-fca9-4fbe-9298-0a0ea8636ff5
+INFO  : Total jobs = 1
+INFO  : Launching Job 1 out of 1
+INFO  : Starting task [Stage-1:MAPRED] in serial mode
+INFO  : Number of reduce tasks determined at compile time: 1
+INFO  : In order to change the average load for a reducer (in bytes):
+INFO  :   set hive.exec.reducers.bytes.per.reducer=<number>
+INFO  : In order to limit the maximum number of reducers:
+INFO  :   set hive.exec.reducers.max=<number>
+INFO  : In order to set a constant number of reducers:
+INFO  :   set mapreduce.job.reduces=<number>
+INFO  : number of splits:1
+INFO  : Submitting tokens for job: job_local1390979414_0042
+INFO  : Executing with tokens: []
+INFO  : The url to track the job: http://localhost:8080/
+INFO  : Job running in-process (local Hadoop)
+INFO  : 2026-10-10 15:18:21,045 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 1.49 sec
+INFO  : MapReduce Total cumulative CPU time: 1 seconds 490 msec
+INFO  : Ended Job = job_local1390979414_0042
+INFO  : MapReduce Jobs Launched: 
+INFO  : Stage-Stage-1:  Cumulative CPU: 1.49 sec   HDFS Read: 1101978062 HDFS Write: 16647555 HDFS EC Read: 0 SUCCESS
+INFO  : Total MapReduce CPU Time Spent: 1 seconds 490 msec
+INFO  : Completed executing command(queryId=hive_20261010151819_d2b5a025-fca9-4fbe-9298-0a0ea8636ff5); Time taken: 1.367 seconds
++-----------+---------------------+-------------------+
+| nb_users  | nb_users_distincts  | somme_evenements  |
++-----------+---------------------+-------------------+
+| 50000     | 50000               | 1000000           |
++-----------+---------------------+-------------------+
+1 row selected (1.629 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- Répartition et respect des bornes de chaque segment
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> SELECT segment, COUNT(*) AS nb_users,
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . >        MIN(total_watch_sec) AS min_sec, MAX(total_watch_sec) AS max_sec
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > FROM segments_sortie
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > GROUP BY segment
+. . . . . . . . . . . . . . . . . > 
+. . . . . . . . . . . . . . . . . > ORDER BY nb_users DESC;
+INFO  : Compiling command(queryId=hive_20261010151821_7c79f8ef-b9b0-4c99-b5dd-5179e44473a7): SELECT segment, COUNT(*) AS nb_users,
+MIN(total_watch_sec) AS min_sec, MAX(total_watch_sec) AS max_sec
+FROM segments_sortie
+GROUP BY segment
+ORDER BY nb_users DESC
+INFO  : No Stats for inf6303_devoir1@segments_sortie, Columns: segment, total_watch_sec
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:[FieldSchema(name:segment, type:string, comment:null), FieldSchema(name:nb_users, type:bigint, comment:null), FieldSchema(name:min_sec, type:bigint, comment:null), FieldSchema(name:max_sec, type:bigint, comment:null)], properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151821_7c79f8ef-b9b0-4c99-b5dd-5179e44473a7); Time taken: 0.276 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151821_7c79f8ef-b9b0-4c99-b5dd-5179e44473a7): SELECT segment, COUNT(*) AS nb_users,
+MIN(total_watch_sec) AS min_sec, MAX(total_watch_sec) AS max_sec
+FROM segments_sortie
+GROUP BY segment
+ORDER BY nb_users DESC
+WARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. tez) or using Hive 1.X releases.
+INFO  : Query ID = hive_20261010151821_7c79f8ef-b9b0-4c99-b5dd-5179e44473a7
+INFO  : Total jobs = 2
+INFO  : Launching Job 1 out of 2
+INFO  : Starting task [Stage-1:MAPRED] in serial mode
+INFO  : Number of reduce tasks not specified. Estimated from input data size: 1
+INFO  : In order to change the average load for a reducer (in bytes):
+INFO  :   set hive.exec.reducers.bytes.per.reducer=<number>
+INFO  : In order to limit the maximum number of reducers:
+INFO  :   set hive.exec.reducers.max=<number>
+INFO  : In order to set a constant number of reducers:
+INFO  :   set mapreduce.job.reduces=<number>
+INFO  : number of splits:1
+INFO  : Submitting tokens for job: job_local986555642_0043
+INFO  : Executing with tokens: []
+INFO  : The url to track the job: http://localhost:8080/
+INFO  : Job running in-process (local Hadoop)
+INFO  : 2026-10-10 15:18:23,533 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 0.61 sec
+INFO  : MapReduce Total cumulative CPU time: 610 msec
+INFO  : Ended Job = job_local986555642_0043
+INFO  : Launching Job 2 out of 2
+INFO  : Starting task [Stage-2:MAPRED] in serial mode
+INFO  : Number of reduce tasks determined at compile time: 1
+INFO  : In order to change the average load for a reducer (in bytes):
+INFO  :   set hive.exec.reducers.bytes.per.reducer=<number>
+INFO  : In order to limit the maximum number of reducers:
+INFO  :   set hive.exec.reducers.max=<number>
+INFO  : In order to set a constant number of reducers:
+INFO  :   set mapreduce.job.reduces=<number>
+INFO  : number of splits:1
+INFO  : Submitting tokens for job: job_local2038788134_0044
+INFO  : Executing with tokens: []
+INFO  : The url to track the job: http://localhost:8080/
+INFO  : Job running in-process (local Hadoop)
+INFO  : 2026-10-10 15:18:25,229 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 0.13 sec
+INFO  : MapReduce Total cumulative CPU time: 130 msec
+INFO  : Ended Job = job_local2038788134_0044
+INFO  : MapReduce Jobs Launched: 
+INFO  : Stage-Stage-1:  Cumulative CPU: 0.61 sec   HDFS Read: 1105287356 HDFS Write: 16647674 HDFS EC Read: 0 SUCCESS
+INFO  : Stage-Stage-2:  Cumulative CPU: 0.13 sec   HDFS Read: 1105287356 HDFS Write: 16647877 HDFS EC Read: 0 SUCCESS
+INFO  : Total MapReduce CPU Time Spent: 740 msec
+INFO  : Completed executing command(queryId=hive_20261010151821_7c79f8ef-b9b0-4c99-b5dd-5179e44473a7); Time taken: 3.312 seconds
++--------------+-----------+----------+----------+
+|   segment    | nb_users  | min_sec  | max_sec  |
++--------------+-----------+----------+----------+
+| actif        | 30901     | 30003    | 54999    |
+| occasionnel  | 11669     | 1574     | 29999    |
+| intensif     | 7430      | 55000    | 106412   |
++--------------+-----------+----------+----------+
+3 rows selected (3.632 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> SELECT * FROM segments_sortie LIMIT 5;
+INFO  : Compiling command(queryId=hive_20261010151825_8294b0fe-f2bc-43c9-8cff-6c59c2b0e5d0): SELECT * FROM segments_sortie LIMIT 5
+INFO  : No Stats for inf6303_devoir1@segments_sortie, Columns: country, user_id, event_count, segment, total_watch_sec
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Created Hive schema: Schema(fieldSchemas:[FieldSchema(name:segments_sortie.user_id, type:string, comment:null), FieldSchema(name:segments_sortie.country, type:string, comment:null), FieldSchema(name:segments_sortie.event_count, type:bigint, comment:null), FieldSchema(name:segments_sortie.total_watch_sec, type:bigint, comment:null), FieldSchema(name:segments_sortie.segment, type:string, comment:null)], properties:null)
+INFO  : Completed compiling command(queryId=hive_20261010151825_8294b0fe-f2bc-43c9-8cff-6c59c2b0e5d0); Time taken: 0.25 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Executing command(queryId=hive_20261010151825_8294b0fe-f2bc-43c9-8cff-6c59c2b0e5d0): SELECT * FROM segments_sortie LIMIT 5
+INFO  : Completed executing command(queryId=hive_20261010151825_8294b0fe-f2bc-43c9-8cff-6c59c2b0e5d0); Time taken: 0.0 seconds
++--------------------------+--------------------------+------------------------------+----------------------------------+--------------------------+
+| segments_sortie.user_id  | segments_sortie.country  | segments_sortie.event_count  | segments_sortie.total_watch_sec  | segments_sortie.segment  |
++--------------------------+--------------------------+------------------------------+----------------------------------+--------------------------+
+| u000001                  | Senegal                  | 26                           | 60487                            | intensif                 |
+| u000002                  | Canada                   | 17                           | 26137                            | occasionnel              |
+| u000003                  | Cote_d_Ivoire            | 27                           | 45954                            | actif                    |
+| u000004                  | Canada                   | 18                           | 51017                            | actif                    |
+| u000005                  | Canada                   | 17                           | 35253                            | actif                    |
++--------------------------+--------------------------+------------------------------+----------------------------------+--------------------------+
+5 rows selected (0.3 seconds)
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> -- A4.4 Export (terminal JupyterLab, hors Beeline) :
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --   rm -f /home/jovyan/work/output/segments_utilisateurs.csv
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --   hdfs dfs -getmerge /inf6303/devoir1/sorties/segments \
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --     /home/jovyan/work/output/segments_utilisateurs.csv
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> --   wc -l /home/jovyan/work/output/segments_utilisateurs.csv   # attendu : 50000
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> 
+0: jdbc:hive2://hive:10000/default> Closing: 0: jdbc:hive2://hive:10000/default
