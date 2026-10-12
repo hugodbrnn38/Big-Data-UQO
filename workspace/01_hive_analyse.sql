@@ -73,7 +73,6 @@ FROM evenements_massifs;
 
 -- TODO A4 : produire puis exporter un segment par utilisateur.
 -- Le répertoire HDFS imposé est /inf6303/devoir1/sorties/segments
--- [Franklin]
 
 -- A4.1 Prérequis : un utilisateur a-t-il plusieurs pays ?
 -- Résultat obtenu : 0 => le pays est unique par user_id, MAX(country)
