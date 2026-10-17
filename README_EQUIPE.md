@@ -6,7 +6,7 @@
 |---|---|---|---|---|
 | P1 | Hive A1 + A2 + section 3 (volume HDFS) → gabarit **TODO A2 + A3** | Mikael | Dim. 11 oct. | À faire |
 | P2 | Hive A3 + D2 (architecture) → gabarit **TODO A1 + A4** | Franklin | Dim. 11 oct. | A3 livré · D2 livré |
-| P3 | MongoDB B1 + B2 + B3 | Gaston | Ven. 16 oct. | À faire |
+| P3 | MongoDB B1 + B2 + B3 | Gaston | Ven. 16 oct. | Terminé et validé |
 | P4 | Cassandra C1 + C2 + C3 | Sabra | Mar. 20 oct. | À faire |
 | P5 | Intégration D1 + reproductibilité + rapport | Hugo | Sam. 24 oct. | À faire |
 
@@ -49,9 +49,54 @@ Chacun travaille **directement dans le fichier fourni** (`01_hive_analyse.sql`, 
   ```
 
 ### `output/audience_cible.jsonl` (MongoDB → Cassandra)
-- Produit par : `02_mongodb_enrichissement.py` (B3) — *à compléter par P3*
-- Champs : `user_id`, `country`, `plan`, `analytics{...}` — *à préciser*
-- Calcul du score utilisé pour le tri Cassandra : *à définir en équipe*
+
+- Produit par : `02_mongodb_enrichissement.py` (B3).
+- Format : JSON Lines (JSONL), encodage UTF-8.
+- Nombre d'enregistrements : **34 855**.
+- Taille : **4 990 244 octets** (environ 4,76 Mio).
+- Une ligne correspond à un profil utilisateur.
+- Chaque profil possède un identifiant `user_id` unique.
+
+#### Critères de sélection
+
+Seuls les profils respectant simultanément les conditions suivantes sont exportés :
+
+1. `consent_analytics = true`
+2. `analytics.segment` appartient à `["intensif", "actif"]`
+
+#### Structure des documents
+
+| Champ | Type | Description |
+|---|---|---|
+| `user_id` | string | Identifiant unique de l'utilisateur |
+| `country` | string | Pays de l'utilisateur |
+| `plan` | string | Type d'abonnement |
+| `analytics.nb_events` | integer | Nombre d'événements |
+| `analytics.total_watch_sec` | integer | Durée totale de visionnement en secondes |
+| `analytics.segment` | string | Segment analytique |
+
+Exemple de document :
+
+```json
+{"user_id":"u000001","country":"Senegal","plan":"gratuit","analytics":{"nb_events":26,"total_watch_sec":60487,"segment":"intensif"}}
+```
+
+#### Résultats de l'exportation
+
+| Indicateur | Valeur |
+|---|---:|
+| Profils MongoDB initiaux | 50 000 |
+| Profils admissibles | 34 855 |
+| Profils exportés | 34 855 |
+| Profils intensifs | 6 784 |
+| Profils actifs | 28 071 |
+| Profils exclus | 15 145 |
+| Réduction du nombre d'enregistrements | 30,29 % |
+| Erreurs de validation | 0 |
+
+Le fichier est destiné à la partie C – Cassandra.
+
+Le calcul du score utilisé pour le classement Cassandra reste à définir en équipe.
 
 ---
 
@@ -133,16 +178,79 @@ Contrôles attendus (exécution du 9 oct. 2026) :
 | Somme des `event_count` | 1 000 000 |
 | actif / occasionnel / intensif | 30 901 / 11 669 / 7 430 |
 
-### Étape 2 – Partie B : MongoDB — *à compléter par P3*
+### Étape 2 – Partie B : MongoDB
+
+Cette étape importe les profils utilisateurs, crée les index MongoDB,
+enrichit les documents avec les résultats Hive et exporte l'audience
+cible destinée à Cassandra.
+
+#### Prérequis
+
+Le fichier suivant doit avoir été généré par la partie A :
+
+`workspace/output/segments_utilisateurs.csv`
+
+Il contient 50 000 enregistrements.
+
+Le fichier documentaire source est :
+
+`data/profils_utilisateurs.jsonl.gz`
+
+#### Démarrage des services
+
 **PowerShell (Windows)**
+
 ```powershell
 docker compose --profile hadoop stop
 docker compose --profile nosql up -d --build
 ```
-**Terminal JupyterLab (Linux)**
-```bash
-python /home/jovyan/work/02_mongodb_enrichissement.py
+
+Vérifier les services :
+
+```powershell
+docker compose ps
 ```
+
+#### Exécution de MongoDB
+
+**PowerShell (Windows)**
+
+```powershell
+docker compose exec notebook python /home/jovyan/work/02_mongodb_enrichissement.py
+```
+
+Le script exécute successivement :
+
+- B1 : importation des 50 000 profils documentaires ;
+- B1 : création des index MongoDB ;
+- B2 : enrichissement avec les segments produits par Hive ;
+- B3 : sélection et exportation de l'audience cible.
+
+#### Validation du livrable
+
+```powershell
+docker compose exec notebook python /home/jovyan/work/validation_mongodb.py
+```
+
+Résultats obtenus :
+
+```text
+=== VALIDATION DU LIVRABLE MONGODB ===
+Documents analyses : 34855
+Identifiants uniques : 34855
+Segments intensifs : 6784
+Segments actifs : 28071
+Erreurs detectees : 0
+
+VALIDATION MONGODB REUSSIE
+```
+
+#### Fichier produit
+
+`workspace/output/audience_cible.jsonl`
+
+Ce fichier contient 34 855 profils sélectionnés et constitue
+l'entrée de la partie C – Cassandra.
 
 ### Étape 3 – Partie C : Cassandra — *à compléter par P4*
 ```bash
