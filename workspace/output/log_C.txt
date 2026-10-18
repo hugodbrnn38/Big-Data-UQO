@@ -1,0 +1,88 @@
+=== PARTIE C1 : MODELE ORIENTE REQUETE ===
+Connexion Cassandra etablie
+Table audience_par_pays_segment creee :
+  PRIMARY KEY ((country, segment), score, user_id)
+  CLUSTERING ORDER BY (score DESC, user_id ASC)
+
+=== PARTIE C2 : CHARGEMENT ===
+Documents lus dans audience_cible.jsonl : 34855
+Insertions envoyees : 34855, echecs : 0 (13.8 s)
+
+Lignes par partition (country, segment) :
+  Belgique       actif       1978  (attendu 1978)
+  Belgique       intensif     474  (attendu 474)
+  Cameroun       actif       2536  (attendu 2536)
+  Cameroun       intensif     604  (attendu 604)
+  Canada         actif       8792  (attendu 8792)
+  Canada         intensif    2077  (attendu 2077)
+  Cote_d_Ivoire  actif       3370  (attendu 3370)
+  Cote_d_Ivoire  intensif     811  (attendu 811)
+  France         actif       3305  (attendu 3305)
+  France         intensif     820  (attendu 820)
+  Maroc          actif       2752  (attendu 2752)
+  Maroc          intensif     684  (attendu 684)
+  Senegal        actif       3666  (attendu 3666)
+  Senegal        intensif     932  (attendu 932)
+  Tunisie        actif       1672  (attendu 1672)
+  Tunisie        intensif     382  (attendu 382)
+Nombre de partitions : 16
+
+Documents exportes par MongoDB : 34855
+Lignes chargees dans Cassandra : 34855
+C2 - Chargement verifie : exportes = charges
+
+=== PARTIE C3 : REQUETES DE SERVICE ===
+
+--- Top 10 Canada / intensif ---
+        user_id |           score |       nb_events |            plan
+        u012192 |           99744 |              36 |        standard
+        u047861 |           96938 |              28 |        standard
+        u025691 |           95497 |              34 |        standard
+        u049062 |           95407 |              42 |         premium
+        u042077 |           94314 |              30 |        standard
+        u001658 |           94019 |              24 |        standard
+        u007230 |           93381 |              26 |         gratuit
+        u013563 |           93250 |              37 |         gratuit
+        u025640 |           90301 |              31 |         gratuit
+        u029858 |           90175 |              33 |         premium
+
+--- Top 10 France / actif ---
+        user_id |           score |       nb_events |            plan
+        u048934 |           54994 |              25 |         premium
+        u009679 |           54993 |              22 |         gratuit
+        u015351 |           54982 |              24 |        standard
+        u017027 |           54967 |              21 |        standard
+        u020613 |           54964 |              24 |         gratuit
+        u010041 |           54951 |              22 |        standard
+        u045319 |           54948 |              22 |         gratuit
+        u001195 |           54941 |              27 |         gratuit
+        u044077 |           54938 |              23 |         gratuit
+        u036149 |           54929 |              26 |        standard
+
+--- Recherche globale par plan sur audience_par_pays_segment ---
+CQL : SELECT user_id, country, segment, score FROM audience_par_pays_segment WHERE plan = 'premium' LIMIT 10
+Refusee par Cassandra : Error from server: code=2200 [Invalid query] message="Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING"
+Avec ALLOW FILTERING : 6352 lignes premium trouvees apres lecture des 34855 lignes de la table (balayage complet)
+
+Table audience_par_plan creee :
+  PRIMARY KEY ((plan), score, user_id)
+  CLUSTERING ORDER BY (score DESC, user_id ASC)
+Lignes par plan :
+  gratuit    16831  (attendu 16831)
+  premium     6352  (attendu 6352)
+  standard   11672  (attendu 11672)
+
+--- Top 10 premium (audience_par_plan, une seule partition lue) ---
+        user_id |           score |         country |         segment
+        u041488 |          103073 |        Cameroun |        intensif
+        u040743 |           96078 |   Cote_d_Ivoire |        intensif
+        u049062 |           95407 |          Canada |        intensif
+        u009818 |           95404 |         Senegal |        intensif
+        u049503 |           92788 |          France |        intensif
+        u025368 |           92400 |        Cameroun |        intensif
+        u024406 |           92099 |        Belgique |        intensif
+        u002854 |           90899 |         Senegal |        intensif
+        u029858 |           90175 |          Canada |        intensif
+        u004019 |           89320 |          Canada |        intensif
+
+C3 - Requetes de service terminees.
