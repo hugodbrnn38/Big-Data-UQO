@@ -1,6 +1,6 @@
 # Partie C – Cassandra : réponses pour le rapport
 
-Script : `workspace/03_cassandra_publication.py` · Sortie complète : `workspace/log_C.txt`
+Script : `workspace/03_cassandra_publication.py` · Sortie complète : `workspace/output/log_C.txt`
 
 ```bash
 docker compose --profile nosql up -d --build
