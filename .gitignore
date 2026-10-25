@@ -1,1 +1,5 @@
 *:Zone.Identifier
+# Artefacts locaux (JupyterLab, Hadoop getmerge)
+.ipynb_checkpoints/
+*.crc
+workspace/output/*.ipynb
