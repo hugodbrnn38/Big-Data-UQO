@@ -1,0 +1,65 @@
+=== FICHIERS DE PASSAGE ===
+segments_utilisateurs.csv OK 1654528
+audience_cible.jsonl OK 4990244
+
+=== D1.1 : COMPTAGES PAR ETAPE ===
+Etape                                          Lignes
+1. Hive : segments_utilisateurs.csv             50000
+2. MongoDB : profils                            50000
+   MongoDB : profils enrichis (analytics)       50000
+   MongoDB : consentants intensif/actif         34855
+3. Fichier : audience_cible.jsonl               34855
+4. Cassandra : audience_par_pays_segment        34855
+   Partitions non vides : 16
+
+Reduction par filtre MongoDB :
+  intensif     consentants   6784   non consentants    646
+  actif        consentants  28071   non consentants   2830
+  occasionnel  consentants  10642   non consentants   1027
+  Exclus car occasionnel : 11669
+  Exclus car intensif/actif non consentant : 3476
+
+Controles de coherence :
+  OK     Hive : user_id distincts                               50000  (attendu 50000)
+  OK     Hive : somme des nb_events                           1000000  (attendu 1000000)
+  OK     MongoDB : profils = lignes Hive                        50000  (attendu 50000)
+  OK     MongoDB : profils enrichis = profils                   50000  (attendu 50000)
+  OK     JSONL : lignes = admissibles MongoDB                   34855  (attendu 34855)
+  OK     JSONL + exclus = profils                               50000  (attendu 50000)
+  OK     Cassandra : lignes = lignes JSONL                      34855  (attendu 34855)
+  OK     Cassandra : lignes occasionnel                             0  (attendu 0)
+  OK     Hive -> MongoDB : profils differents                       0  (attendu 0)
+  OK     MongoDB -> JSONL : documents differents                    0  (attendu 0)
+  OK     JSONL -> Cassandra : lignes differentes                    0  (attendu 0)
+  OK     Cassandra : user_id absents du JSONL                       0  (attendu 0)
+
+=== D1.2 : TRACABILITE DE 3 user_id ===
+
+--- u000001 ---
+etape                  | pays           | nb_events | duree/score | segment     | plan      | consent
+-----------------------+----------------+-----------+-------------+-------------+-----------+--------
+Hive (CSV)             | Senegal        | 26        | 60487       | intensif    | -         | -      
+MongoDB (profils)      | Senegal        | 26        | 60487       | intensif    | gratuit   | True   
+audience_cible.jsonl   | Senegal        | 26        | 60487       | intensif    | gratuit   | -      
+Cassandra              | Senegal        | 26        | 60487       | intensif    | gratuit   | -      
+=> Present aux 4 etapes, valeurs identiques. Le score Cassandra est la duree totale Hive (total_watch_sec) ; le plan vient du profil MongoDB.
+
+--- u000003 ---
+etape                  | pays           | nb_events | duree/score | segment     | plan      | consent
+-----------------------+----------------+-----------+-------------+-------------+-----------+--------
+Hive (CSV)             | Cote_d_Ivoire  | 27        | 45954       | actif       | -         | -      
+MongoDB (profils)      | Cote_d_Ivoire  | 27        | 45954       | actif       | standard  | True   
+audience_cible.jsonl   | Cote_d_Ivoire  | 27        | 45954       | actif       | standard  | -      
+Cassandra              | Cote_d_Ivoire  | 27        | 45954       | actif       | standard  | -      
+=> Present aux 4 etapes, valeurs identiques. Le score Cassandra est la duree totale Hive (total_watch_sec) ; le plan vient du profil MongoDB.
+
+--- u000002 ---
+etape                  | pays           | nb_events | duree/score | segment     | plan      | consent
+-----------------------+----------------+-----------+-------------+-------------+-----------+--------
+Hive (CSV)             | Canada         | 17        | 26137       | occasionnel | -         | -      
+MongoDB (profils)      | Canada         | 17        | 26137       | occasionnel | premium   | False  
+audience_cible.jsonl   | ABSENT         |           |             |             |           |        
+Cassandra              | ABSENT         |           |             |             |           |        
+=> Absent du JSONL et de Cassandra, comme attendu : segment occasionnel et consent_analytics = false. Le filtre B3 l'exclut ; il reste enrichi dans MongoDB.
+
+VALIDATION DU PIPELINE REUSSIE : Hive -> MongoDB -> Cassandra coherent
