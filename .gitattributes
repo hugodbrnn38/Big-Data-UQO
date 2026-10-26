@@ -2,5 +2,8 @@
 *.csv   text eol=lf
 *.jsonl text eol=lf
 
+# Scripts exécutés par bash dans les conteneurs Linux : un CR casse « set -euo pipefail »
+*.sh    text eol=lf
+
 # Données fournies : aucune conversion, pour rester conformes à SHA256SUMS.txt
 data/** -text
