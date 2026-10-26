@@ -2,8 +2,10 @@
 *.csv   text eol=lf
 *.jsonl text eol=lf
 
-# Scripts exécutés par bash dans les conteneurs Linux : un CR casse « set -euo pipefail »
+# Scripts lus dans les conteneurs Linux (bash, Beeline) : un CR casse « set -euo pipefail »
+# et Beeline affiche une ligne vide parasite après chaque ligne SQL
 *.sh    text eol=lf
+*.sql   text eol=lf
 
 # Données fournies : aucune conversion, pour rester conformes à SHA256SUMS.txt
 data/** -text
