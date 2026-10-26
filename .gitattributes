@@ -1,0 +1,11 @@
+# Fichiers de passage du pipeline : fins de ligne LF sur tous les postes
+*.csv   text eol=lf
+*.jsonl text eol=lf
+
+# Scripts lus dans les conteneurs Linux (bash, Beeline) : un CR casse « set -euo pipefail »
+# et Beeline affiche une ligne vide parasite après chaque ligne SQL
+*.sh    text eol=lf
+*.sql   text eol=lf
+
+# Données fournies : aucune conversion, pour rester conformes à SHA256SUMS.txt
+data/** -text

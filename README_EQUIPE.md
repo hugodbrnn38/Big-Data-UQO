@@ -4,11 +4,15 @@
 
 | Rôle | Partie | Responsable | Échéance | Statut |
 |---|---|---|---|---|
-| P1 | Hive A1 + A2 + section 3 (volume HDFS) → gabarit **TODO A2 + A3** | Mikael | Dim. 11 oct. | À faire |
-| P2 | Hive A3 + D2 (architecture) → gabarit **TODO A1 + A4** | Franklin | Dim. 11 oct. | A3 livré · D2 livré |
-| P3 | MongoDB B1 + B2 + B3 | Gaston | Ven. 16 oct. | Terminé et validé |
-| P4 | Cassandra C1 + C2 + C3 | Sabra | Mar. 20 oct. | À faire |
-| P5 | Intégration D1 + reproductibilité + rapport | Hugo | Sam. 24 oct. | À faire |
+| P1 | Hive section 3 (volume HDFS) + A1 + A2 → gabarit **TODO A2 + A3** | Mikael | Dim. 11 oct. | Terminé |
+| P2 | Hive A3 + D2 (architecture) → gabarit **TODO A1 + A4** | Franklin | Dim. 11 oct. | Terminé |
+| P3 | MongoDB B1 + B2 + B3 | Gaston | Ven. 16 oct. | Terminé |
+| P4 | Cassandra C1 + C2 + C3 | Sabra | Mar. 20 oct. | Terminé |
+| P5 | Validation D1 + intégration (reproductibilité, rapport) | Hugo | Sam. 24 oct. | Terminé |
+
+Réponses rédigées pour le rapport : `workspace/partie_A.md`, `workspace/partie_C.md`,
+`workspace/partie_D1.md` ; partie B dans ce fichier (contrat `audience_cible.jsonl`) ;
+diagramme D2 : `rapport/architecture_D2.png`.
 
 Revue croisée : P1 → P2 → P3 → P4 → P5 → P1.
 
@@ -21,8 +25,8 @@ Chacun travaille **directement dans le fichier fourni** (`01_hive_analyse.sql`, 
 | Zone du gabarit | Contenu | Partie de l'énoncé | Responsable | Statut |
 |---|---|---|---|---|
 | TODO A1 | table externe `evenements_massifs` (10 colonnes), `/inf6303/devoir1/evenements` | A1 – tables | Franklin | Fait |
-| TODO A2 | table externe `catalogue_contenus` (5 colonnes), `/inf6303/devoir1/catalogue` | A1 – tables | Mikael | À faire |
-| TODO A3 | contrôles de qualité et analyses | A1 – qualité + A2 – analyses | Mikael | Comptage et invalides faits ; analyses à faire |
+| TODO A2 | table externe `catalogue_contenus` (5 colonnes), `/inf6303/devoir1/catalogue` | A1 – tables | Mikael | Fait |
+| TODO A3 | contrôles de qualité, analyses et EXPLAIN | A1 – qualité + A2 – analyses | Mikael | Fait |
 | TODO A4 | segment par utilisateur, export vers `/inf6303/devoir1/sorties/segments` | **A3** – sortie vers MongoDB | Franklin | Fait |
 
 ---
@@ -96,7 +100,8 @@ Exemple de document :
 
 Le fichier est destiné à la partie C – Cassandra.
 
-Le calcul du score utilisé pour le classement Cassandra reste à définir en équipe.
+Score utilisé pour le classement Cassandra : `analytics.total_watch_sec` (durée totale calculée
+par Hive), sans transformation (voir `workspace/partie_C.md`).
 
 ---
 
@@ -134,6 +139,39 @@ SET hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
 ```
 Après correction : **1 000 000** événements.
 
+### 5. Metastore Hive impossible à créer (`Schema initialization failed!`)
+Erreur dans `docker compose logs hive` : `Failed to create database '/opt/hive/data/metastore_db'`.
+Quand le volume `hive-data` est recréé (après un `down -v`, par exemple), sa racine peut appartenir
+à `root`, alors que Hive tourne avec l'utilisateur `hive` (uid 1000) : il ne peut pas y écrire.
+Correctif (PowerShell), puis recréer Hive comme au point 2 :
+```powershell
+docker run --rm -v inf6303-devoir1_hive-data:/d alpine chown 1000:1000 /d
+docker compose --profile hadoop rm -sf hive
+docker compose --profile hadoop up -d --force-recreate hive
+```
+
+### 6. `getmerge` refusé sous Windows (`getmerge: Operation not permitted`)
+`hdfs dfs -getmerge` écrit le fichier local puis tente d'en fixer les permissions POSIX, ce que
+refuse le dossier `workspace/` monté depuis Windows. Le fichier reste vide (0 ligne).
+Procédure corrigée : fusionner dans `/tmp` du conteneur, puis copier (contenu identique) :
+```bash
+rm -f /tmp/segments_utilisateurs.csv /home/jovyan/work/output/segments_utilisateurs.csv
+hdfs dfs -getmerge /inf6303/devoir1/sorties/segments /tmp/segments_utilisateurs.csv
+cp /tmp/segments_utilisateurs.csv /home/jovyan/work/output/segments_utilisateurs.csv
+```
+
+### 7. `JAVA_HOME is not set` avec `docker compose exec`
+L'image du notebook ne définit pas `JAVA_HOME` : `hdfs` et `beeline` échouent lorsqu'on les lance
+depuis PowerShell par `docker compose exec`. Passer la variable à chaque commande :
+```powershell
+docker compose exec -e JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 notebook hdfs dfs -ls /inf6303/devoir1
+```
+
+### 8. Fins de ligne Windows (CRLF)
+Avec `core.autocrlf=true`, un script extrait en CRLF casse bash dans le conteneur
+(`set: pipefail: invalid option name`). Le fichier `.gitattributes` impose LF pour `*.sh`, `*.sql`,
+`*.csv` et `*.jsonl` ; `data/` est exclu pour rester conforme à `SHA256SUMS.txt`.
+
 ---
 
 ## Procédure de reproduction (depuis un environnement remis à zéro)
@@ -161,18 +199,24 @@ mkdir -p /home/jovyan/work/output
 beeline -u jdbc:hive2://hive:10000/default -n jovyan \
   -f /home/jovyan/work/01_hive_analyse.sql 2>&1 | tee /home/jovyan/work/output/log_A.txt
 
-rm -f /home/jovyan/work/output/segments_utilisateurs.csv
-hdfs dfs -getmerge /inf6303/devoir1/sorties/segments \
-  /home/jovyan/work/output/segments_utilisateurs.csv
+# getmerge via /tmp : l'écriture directe dans work/output échoue sous Windows (correctif 6)
+rm -f /tmp/segments_utilisateurs.csv /home/jovyan/work/output/segments_utilisateurs.csv
+hdfs dfs -getmerge /inf6303/devoir1/sorties/segments /tmp/segments_utilisateurs.csv
+cp /tmp/segments_utilisateurs.csv /home/jovyan/work/output/segments_utilisateurs.csv
 wc -l /home/jovyan/work/output/segments_utilisateurs.csv   # attendu : 50000
+sha256sum /home/jovyan/work/output/segments_utilisateurs.csv
+# attendu : cd53b4ffcda7fb4847aeca73f265b0a0ce2cdf76b6afe168702904ebd6f59aab
 ```
 
-Contrôles attendus (exécution du 9 oct. 2026) :
+Contrôles attendus (exécution du 25 oct. 2026, détail dans `workspace/partie_A.md`) :
 
 | Contrôle | Valeur |
 |---|---|
-| Événements | 1 000 000 |
+| Fichiers HDFS / volume compressé | 8 / 23,4 Mio (un split par fichier gzip) |
+| Événements / contenus | 1 000 000 / 2 000 |
 | Lignes invalides (user_id vide / durée NULL / durée < 0) | 0 / 0 / 0 |
+| `event_id` en double / `content_id` absents du catalogue | 0 / 0 |
+| Répartitions pays et type, top 10 des contenus | identiques à `MANIFESTE_DONNEES.json` |
 | Utilisateurs multi-pays | 0 |
 | Utilisateurs en sortie | 50 000 (distincts) |
 | Somme des `event_count` | 1 000 000 |
@@ -252,16 +296,70 @@ VALIDATION MONGODB REUSSIE
 Ce fichier contient 34 855 profils sélectionnés et constitue
 l'entrée de la partie C – Cassandra.
 
-### Étape 3 – Partie C : Cassandra — *à compléter par P4*
-```bash
-python /home/jovyan/work/03_cassandra_publication.py
-```
-Cassandra peut demander jusqu'à deux minutes avant d'accepter les connexions.
+### Étape 3 – Partie C : Cassandra
 
-### Étape 4 – Partie D : Validation — *à compléter par P5*
-```bash
-python /home/jovyan/work/04_validation_pipeline.py
+#### Prérequis
+`workspace/output/audience_cible.jsonl` produit par la partie B (34 855 documents).
+Le profil `nosql` est déjà démarré à l'étape 2.
+
+#### Attendre Cassandra
+Cassandra peut demander jusqu'à deux minutes avant d'accepter les connexions. Attendre que le
+service soit `healthy` :
+
+**PowerShell (Windows)**
+```powershell
+docker compose ps cassandra      # STATUS doit afficher « (healthy) »
 ```
+Le script réessaie de toute façon la connexion toutes les 10 s pendant 3 minutes.
+
+#### Exécution
+**Terminal JupyterLab (Linux)**
+```bash
+python /home/jovyan/work/03_cassandra_publication.py 2>&1 | tee /home/jovyan/work/output/log_C.txt
+```
+
+Le script est rejouable (il supprime et recrée ses tables) et exécute :
+- C1 : keyspace `inf6303_devoir1`, table `audience_par_pays_segment`,
+  `PRIMARY KEY ((country, segment), score, user_id)`, tri `score DESC, user_id ASC` ;
+- C2 : lecture de `audience_cible.jsonl`, insertion par requête préparée, comptage par partition ;
+- C3 : top 10 Canada/intensif et France/actif, refus de la recherche globale par plan,
+  table supplémentaire `audience_par_plan`.
+
+Contrôles attendus (`output/log_C.txt`, détail dans `workspace/partie_C.md`) :
+
+| Contrôle | Valeur |
+|---|---|
+| Documents lus dans `audience_cible.jsonl` | 34 855 |
+| Lignes chargées / échecs | 34 855 / 0 |
+| Partitions (8 pays × 2 segments) | 16 |
+| `audience_par_plan` (gratuit / premium / standard) | 16 831 / 6 352 / 11 672 |
+
+### Étape 4 – Partie D1 : Validation de bout en bout
+
+#### Prérequis
+Étapes 1 à 3 exécutées : CSV Hive présent, collection MongoDB `profils` enrichie, table Cassandra
+chargée. Le profil `nosql` doit être démarré (MongoDB et Cassandra sont interrogés).
+
+#### Exécution
+**Terminal JupyterLab (Linux)**
+```bash
+python /home/jovyan/work/04_validation_pipeline.py 2>&1 | tee /home/jovyan/work/output/log_D.txt
+```
+Autres `user_id` à suivre en argument : `python 04_validation_pipeline.py u000004 u000006`.
+
+Le script ne modifie rien. Il compte chaque étape, compare les valeurs utilisateur par utilisateur
+entre Hive, MongoDB, le JSONL et Cassandra, et suit trois `user_id`. Il se termine avec un code non
+nul au moindre écart.
+
+Contrôles attendus (`output/log_D.txt`, détail dans `workspace/partie_D1.md`) :
+
+| Contrôle | Valeur |
+|---|---|
+| Hive CSV / profils MongoDB / profils enrichis | 50 000 / 50 000 / 50 000 |
+| `audience_cible.jsonl` / lignes Cassandra | 34 855 / 34 855 |
+| Exclus car occasionnel / car non consentant | 11 669 / 3 476 |
+| Valeurs différentes entre étapes | 0 |
+| Résultat | `VALIDATION DU PIPELINE REUSSIE` |
 
 ---
 
@@ -270,7 +368,7 @@ python /home/jovyan/work/04_validation_pipeline.py
 - `01_hive_analyse.sql`, `02_mongodb_enrichissement.py`, `03_cassandra_publication.py`
 - `output/segments_utilisateurs.csv`, `output/audience_cible.jsonl`
 - `README_EQUIPE.md`
-- `rapport/` (sources du rapport) : `architecture_D2.png`, `architecture_D2.svg`
+- `rapport/` (sources du rapport) : `architecture_D2.png` (diagramme D2)
 
 Ne pas inclure les volumes Docker ni les fichiers sources massifs (`data/`).
 
