@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2380" height="1000" viewBox="0 0 2380 1000">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#262626"/></marker></defs>
+<rect width="2380" height="1000" fill="#FFFFFF"/>
+<text x="1190.0" y="42.0" font-family="DejaVu Sans" font-size="26" font-weight="bold" fill="#1F1F1F" text-anchor="middle">Architecture du pipeline polyglotte : Hive → MongoDB → Cassandra</text>
+<text x="1190.0" y="72.0" font-family="DejaVu Sans" font-size="15" font-weight="normal" fill="#404040" text-anchor="middle">Chaque technologie a une responsabilité distincte ; les fichiers de passage relient les systèmes par user_id</text>
+<rect x="30" y="100" width="230" height="600" rx="16" fill="#F2F2F2" fill-opacity="0.45" stroke="#7F7F7F" stroke-width="2.5"/>
+<rect x="30" y="100" width="230" height="58" rx="16" fill="#7F7F7F"/>
+<rect x="30" y="140" width="230" height="18" fill="#7F7F7F"/>
+<text x="145.0" y="125.0" font-family="DejaVu Sans" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Sources fournies</text>
+<text x="145.0" y="147.0" font-family="DejaVu Sans" font-size="12.5" font-weight="normal" fill="#FFFFFF" text-anchor="middle">fichiers bruts, non modifiés</text>
+<rect x="330" y="100" width="465" height="380" rx="16" fill="#DCEAF7" fill-opacity="0.45" stroke="#1F4E79" stroke-width="2.5"/>
+<rect x="330" y="100" width="465" height="58" rx="16" fill="#1F4E79"/>
+<rect x="330" y="140" width="465" height="18" fill="#1F4E79"/>
+<text x="562.5" y="125.0" font-family="DejaVu Sans" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">STOCKAGE ANALYTIQUE</text>
+<text x="562.5" y="147.0" font-family="DejaVu Sans" font-size="12.5" font-weight="normal" fill="#FFFFFF" text-anchor="middle">volume massif · lecture en lot · schéma à la lecture</text>
+<rect x="1160" y="100" width="275" height="380" rx="16" fill="#E2F0D9" fill-opacity="0.45" stroke="#38761D" stroke-width="2.5"/>
+<rect x="1160" y="100" width="275" height="58" rx="16" fill="#38761D"/>
+<rect x="1160" y="140" width="275" height="18" fill="#38761D"/>
+<text x="1297.5" y="125.0" font-family="DejaVu Sans" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">DOCUMENT OPÉRATIONNEL</text>
+<text x="1297.5" y="147.0" font-family="DejaVu Sans" font-size="12.5" font-weight="normal" fill="#FFFFFF" text-anchor="middle">profil complet, à jour par user_id</text>
+<rect x="1810" y="100" width="280" height="380" rx="16" fill="#FCE5CD" fill-opacity="0.45" stroke="#B45F06" stroke-width="2.5"/>
+<rect x="1810" y="100" width="280" height="58" rx="16" fill="#B45F06"/>
+<rect x="1810" y="140" width="280" height="18" fill="#B45F06"/>
+<text x="1950.0" y="125.0" font-family="DejaVu Sans" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">VUE DE SERVICE</text>
+<text x="1950.0" y="147.0" font-family="DejaVu Sans" font-size="12.5" font-weight="normal" fill="#FFFFFF" text-anchor="middle">dénormalisée · 1 requête = 1 partition</text>
+<rect x="48" y="180" width="194" height="130" rx="10" fill="#F2F2F2" stroke="#7F7F7F" stroke-width="2.2"/>
+<text x="145.0" y="208.0" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#7F7F7F" text-anchor="middle">Événements</text>
+<text x="145.0" y="234.0" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">evenements/*.csv.gz</text>
+<text x="145.0" y="251.55" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">1 000 000 lignes</text>
+<text x="145.0" y="269.1" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">8 fichiers gzip</text>
+<rect x="48" y="340" width="194" height="110" rx="10" fill="#F2F2F2" stroke="#7F7F7F" stroke-width="2.2"/>
+<text x="145.0" y="368.0" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#7F7F7F" text-anchor="middle">Catalogue</text>
+<text x="145.0" y="394.0" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">catalogue_contenus.csv</text>
+<text x="145.0" y="411.55" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">2 000 contenus</text>
+<rect x="48" y="560" width="194" height="120" rx="10" fill="#F2F2F2" stroke="#7F7F7F" stroke-width="2.2"/>
+<text x="145.0" y="588.0" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#7F7F7F" text-anchor="middle">Profils</text>
+<text x="145.0" y="614.0" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">profils_utilisateurs</text>
+<text x="145.0" y="631.55" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">.jsonl.gz</text>
+<text x="145.0" y="649.1" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">50 000 documents</text>
+<rect x="350" y="180" width="180" height="280" rx="10" fill="#DCEAF7" stroke="#1F4E79" stroke-width="2.2"/>
+<text x="440.0" y="208.0" font-family="DejaVu Sans" font-size="18" font-weight="bold" fill="#1F4E79" text-anchor="middle">HDFS</text>
+<text x="440.0" y="234.0" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">/inf6303/devoir1/</text>
+<text x="440.0" y="251.55" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">evenements/</text>
+<text x="440.0" y="269.1" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">catalogue/</text>
+<text x="440.0" y="286.65" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle"></text>
+<text x="440.0" y="304.2" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">stockage distribué :</text>
+<text x="440.0" y="321.75" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">8 fichiers gzip</text>
+<text x="440.0" y="339.3" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">= 8 lectures parallèles</text>
+<rect x="615" y="180" width="165" height="280" rx="10" fill="#DCEAF7" stroke="#1F4E79" stroke-width="2.2"/>
+<text x="697.5" y="208.0" font-family="DejaVu Sans" font-size="18" font-weight="bold" fill="#1F4E79" text-anchor="middle">Hive</text>
+<text x="697.5" y="234.0" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">tables externes</text>
+<text x="697.5" y="251.55" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">typées (A1)</text>
+<text x="697.5" y="269.1" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle"></text>
+<text x="697.5" y="286.65" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">analyses (A2)</text>
+<text x="697.5" y="304.2" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle"></text>
+<text x="697.5" y="321.75" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">agrégation par</text>
+<text x="697.5" y="339.3" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">user_id + segment</text>
+<text x="697.5" y="356.85" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">(A3)</text>
+<rect x="880" y="245" width="200" height="140" rx="10" fill="#FFF2CC" stroke="#BF9000" stroke-width="2.2" stroke-dasharray="8 5"/>
+<text x="980.0" y="273.0" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#7F6000" text-anchor="middle">Fichier de passage 1</text>
+<text x="980.0" y="299.0" font-family="DejaVu Sans" font-size="12.3" font-weight="bold" fill="#1A1A1A" text-anchor="middle">segments_utilisateurs.csv</text>
+<text x="980.0" y="314.99" font-family="DejaVu Sans" font-size="12.3" font-weight="normal" fill="#1A1A1A" text-anchor="middle">50 000 lignes, sans en-tête</text>
+<text x="980.0" y="330.98" font-family="DejaVu Sans" font-size="12.3" font-weight="normal" fill="#1A1A1A" text-anchor="middle">user_id, country,</text>
+<text x="980.0" y="346.97" font-family="DejaVu Sans" font-size="12.3" font-weight="normal" fill="#1A1A1A" text-anchor="middle">event_count, …, segment</text>
+<rect x="1175" y="180" width="245" height="280" rx="10" fill="#E2F0D9" stroke="#38761D" stroke-width="2.2"/>
+<text x="1297.5" y="208.0" font-family="DejaVu Sans" font-size="18" font-weight="bold" fill="#38761D" text-anchor="middle">MongoDB</text>
+<text x="1297.5" y="234.0" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">collection profils</text>
+<text x="1297.5" y="251.55" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle"></text>
+<text x="1297.5" y="269.1" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">index unique user_id</text>
+<text x="1297.5" y="286.65" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">index composé</text>
+<text x="1297.5" y="304.2" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">(consent_analytics,</text>
+<text x="1297.5" y="321.75" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle"> analytics.segment)</text>
+<text x="1297.5" y="339.3" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle"></text>
+<text x="1297.5" y="356.85" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">sous-document analytics</text>
+<rect x="1525" y="245" width="200" height="140" rx="10" fill="#FFF2CC" stroke="#BF9000" stroke-width="2.2" stroke-dasharray="8 5"/>
+<text x="1625.0" y="273.0" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#7F6000" text-anchor="middle">Fichier de passage 2</text>
+<text x="1625.0" y="299.0" font-family="DejaVu Sans" font-size="12.3" font-weight="bold" fill="#1A1A1A" text-anchor="middle">audience_cible.jsonl</text>
+<text x="1625.0" y="314.99" font-family="DejaVu Sans" font-size="12.3" font-weight="normal" fill="#1A1A1A" text-anchor="middle">34 855 documents</text>
+<text x="1625.0" y="330.98" font-family="DejaVu Sans" font-size="12.3" font-weight="normal" fill="#1A1A1A" text-anchor="middle">consentants,</text>
+<text x="1625.0" y="346.97" font-family="DejaVu Sans" font-size="12.3" font-weight="normal" fill="#1A1A1A" text-anchor="middle">intensif + actif</text>
+<rect x="1545" y="198" width="160" height="32" rx="16" fill="#C00000"/>
+<text x="1625" y="220.0" font-family="DejaVu Sans" font-size="13.5" font-weight="bold" fill="#FFFFFF" text-anchor="middle">POINT DE REPRISE</text>
+<rect x="1825" y="180" width="250" height="280" rx="10" fill="#FCE5CD" stroke="#B45F06" stroke-width="2.2"/>
+<text x="1950.0" y="208.0" font-family="DejaVu Sans" font-size="18" font-weight="bold" fill="#B45F06" text-anchor="middle">Cassandra</text>
+<text x="1950.0" y="234.0" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">audience_par_pays_segment</text>
+<text x="1950.0" y="251.55" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle"></text>
+<text x="1950.0" y="269.1" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">PRIMARY KEY</text>
+<text x="1950.0" y="286.65" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">((country, segment),</text>
+<text x="1950.0" y="304.2" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle"> score, user_id)</text>
+<text x="1950.0" y="321.75" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">score DESC</text>
+<text x="1950.0" y="339.3" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle"></text>
+<text x="1950.0" y="356.85" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">34 855 lignes · 16 partitions</text>
+<rect x="2185" y="250" width="170" height="130" rx="10" fill="#FFFFFF" stroke="#404040" stroke-width="2.2"/>
+<text x="2270.0" y="278.0" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#404040" text-anchor="middle">Application</text>
+<text x="2270.0" y="304.0" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">de ciblage</text>
+<text x="2270.0" y="321.55" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">« top 10</text>
+<text x="2270.0" y="339.1" font-family="DejaVu Sans" font-size="13.5" font-weight="normal" fill="#1A1A1A" text-anchor="middle">Canada / intensif »</text>
+<path d="M 242 245 L 348 245" fill="none" stroke="#262626" stroke-width="2.6" marker-end="url(#ah)"/>
+<rect x="260.62" y="220" width="68.75999999999999" height="23" rx="4" fill="#FFFFFF"/>
+<text x="295" y="237.0" font-family="DejaVu Sans" font-size="14" font-weight="bold" fill="#262626" text-anchor="middle">déposer</text>
+<path d="M 242 395 L 348 395" fill="none" stroke="#262626" stroke-width="2.6" marker-end="url(#ah)"/>
+<rect x="260.62" y="370" width="68.75999999999999" height="23" rx="4" fill="#FFFFFF"/>
+<text x="295" y="387.0" font-family="DejaVu Sans" font-size="14" font-weight="bold" fill="#262626" text-anchor="middle">déposer</text>
+<path d="M 530 315 L 613 315" fill="none" stroke="#262626" stroke-width="2.6" marker-end="url(#ah)"/>
+<rect x="537.62" y="288" width="68.75999999999999" height="23" rx="4" fill="#FFFFFF"/>
+<text x="572" y="305.0" font-family="DejaVu Sans" font-size="14" font-weight="bold" fill="#262626" text-anchor="middle">agréger</text>
+<path d="M 780 315 L 878 315" fill="none" stroke="#262626" stroke-width="2.6" marker-end="url(#ah)"/>
+<rect x="790.28" y="288" width="77.44" height="23" rx="4" fill="#FFFFFF"/>
+<text x="829" y="305.0" font-family="DejaVu Sans" font-size="14" font-weight="bold" fill="#262626" text-anchor="middle">exporter</text>
+<rect x="795.2" y="335" width="67.6" height="18" rx="4" fill="#FFFFFF"/>
+<text x="829" y="349.0" font-family="DejaVu Sans" font-size="12" font-weight="normal" fill="#404040" text-anchor="middle">getmerge</text>
+<path d="M 1080 315 L 1173 315" fill="none" stroke="#262626" stroke-width="2.6" marker-end="url(#ah)"/>
+<rect x="1087.28" y="288" width="77.44" height="23" rx="4" fill="#FFFFFF"/>
+<text x="1126" y="305.0" font-family="DejaVu Sans" font-size="14" font-weight="bold" fill="#262626" text-anchor="middle">enrichir</text>
+<rect x="1081.4" y="335" width="89.2" height="18" rx="4" fill="#FFFFFF"/>
+<text x="1126" y="349.0" font-family="DejaVu Sans" font-size="12" font-weight="normal" fill="#404040" text-anchor="middle">par user_id</text>
+<path d="M 1420 315 L 1523 315" fill="none" stroke="#262626" stroke-width="2.6" marker-end="url(#ah)"/>
+<rect x="1433.28" y="288" width="77.44" height="23" rx="4" fill="#FFFFFF"/>
+<text x="1472" y="305.0" font-family="DejaVu Sans" font-size="14" font-weight="bold" fill="#262626" text-anchor="middle">exporter</text>
+<rect x="1434.6" y="335" width="74.8" height="18" rx="4" fill="#FFFFFF"/>
+<text x="1472" y="349.0" font-family="DejaVu Sans" font-size="12" font-weight="normal" fill="#404040" text-anchor="middle">filtre B3</text>
+<path d="M 1725 315 L 1823 315" fill="none" stroke="#262626" stroke-width="2.6" marker-end="url(#ah)"/>
+<rect x="1739.62" y="288" width="68.75999999999999" height="23" rx="4" fill="#FFFFFF"/>
+<text x="1774" y="305.0" font-family="DejaVu Sans" font-size="14" font-weight="bold" fill="#262626" text-anchor="middle">publier</text>
+<rect x="1722.2" y="335" width="103.6" height="18" rx="4" fill="#FFFFFF"/>
+<text x="1774" y="349.0" font-family="DejaVu Sans" font-size="12" font-weight="normal" fill="#404040" text-anchor="middle">req. préparée</text>
+<path d="M 2075 315 L 2183 315" fill="none" stroke="#262626" stroke-width="2.6" marker-end="url(#ah)"/>
+<rect x="2081.6" y="288" width="94.8" height="23" rx="4" fill="#FFFFFF"/>
+<text x="2129" y="305.0" font-family="DejaVu Sans" font-size="14" font-weight="bold" fill="#262626" text-anchor="middle">interroger</text>
+<rect x="2084.4" y="335" width="89.2" height="18" rx="4" fill="#FFFFFF"/>
+<text x="2129" y="349.0" font-family="DejaVu Sans" font-size="12" font-weight="normal" fill="#404040" text-anchor="middle">requêtes C3</text>
+<path d="M 242 620 L 1297 620 L 1297 462" fill="none" stroke="#262626" stroke-width="2.6" marker-end="url(#ah)"/>
+<rect x="617.12" y="595" width="285.76" height="23" rx="4" fill="#FFFFFF"/>
+<text x="760" y="612.0" font-family="DejaVu Sans" font-size="14" font-weight="bold" fill="#262626" text-anchor="middle">déposer (import des profils, B1)</text>
+<rect x="300" y="580" width="1770" height="0" />
+<rect x="1525" y="525" width="830" height="160" rx="12" fill="#FFFFFF" stroke="#C00000" stroke-width="2.2"/>
+<text x="1545" y="557" font-family="DejaVu Sans" font-size="14" font-weight="bold" fill="#1A1A1A" text-anchor="start">Point de reprise : audience_cible.jsonl</text>
+<text x="1545" y="580" font-family="DejaVu Sans" font-size="14" font-weight="normal" fill="#1A1A1A" text-anchor="start">Si le chargement Cassandra échoue, on relance seulement</text>
+<text x="1545" y="603" font-family="DejaVu Sans" font-size="14" font-weight="normal" fill="#1A1A1A" text-anchor="start">03_cassandra_publication.py depuis ce fichier, sans rejouer Hive</text>
+<text x="1545" y="626" font-family="DejaVu Sans" font-size="14" font-weight="normal" fill="#1A1A1A" text-anchor="start">ni MongoDB. Le script recrée la table : la reprise est idempotente</text>
+<text x="1545" y="649" font-family="DejaVu Sans" font-size="14" font-weight="normal" fill="#1A1A1A" text-anchor="start">et le contrôle exportés = chargés (34 855) valide la reprise.</text>
+<rect x="30" y="740" width="2325" height="230" rx="14" fill="#FAFAFA" stroke="#BFBFBF" stroke-width="1.5"/>
+<text x="55" y="775.0" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#1A1A1A" text-anchor="start">Clé d'interconnexion : user_id, conservée de bout en bout (Hive → CSV → MongoDB → JSONL → Cassandra)</text>
+<text x="55" y="810.0" font-family="DejaVu Sans" font-size="14.5" font-weight="normal" fill="#1A1A1A" text-anchor="start">Volumes transférés :  1 000 000 événements (HDFS)  →  50 000 lignes agrégées (CSV)  →  50 000 profils enrichis (MongoDB)  →  34 855 documents (JSONL)  →  34 855 lignes (Cassandra)</text>
+<text x="55" y="845.0" font-family="DejaVu Sans" font-size="14.5" font-weight="normal" fill="#1A1A1A" text-anchor="start">Les événements bruts ne quittent jamais HDFS : seuls les agrégats par user_id sont transférés vers MongoDB, puis seule l'audience ciblée vers Cassandra.</text>
+<rect x="55" y="890" width="30" height="22" rx="4" fill="#DCEAF7" stroke="#1F4E79" stroke-width="2"/>
+<text x="95" y="907.0" font-family="DejaVu Sans" font-size="14" font-weight="normal" fill="#1A1A1A" text-anchor="start">Stockage analytique (Hive/HDFS)</text>
+<rect x="485" y="890" width="30" height="22" rx="4" fill="#E2F0D9" stroke="#38761D" stroke-width="2"/>
+<text x="525" y="907.0" font-family="DejaVu Sans" font-size="14" font-weight="normal" fill="#1A1A1A" text-anchor="start">Document opérationnel (MongoDB)</text>
+<rect x="915" y="890" width="30" height="22" rx="4" fill="#FCE5CD" stroke="#B45F06" stroke-width="2"/>
+<text x="955" y="907.0" font-family="DejaVu Sans" font-size="14" font-weight="normal" fill="#1A1A1A" text-anchor="start">Vue de service (Cassandra)</text>
+<rect x="1345" y="890" width="30" height="22" rx="4" fill="#FFF2CC" stroke="#BF9000" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="1385" y="907.0" font-family="DejaVu Sans" font-size="14" font-weight="normal" fill="#1A1A1A" text-anchor="start">Fichier de passage</text>
+<text x="55" y="950.0" font-family="DejaVu Sans" font-size="14" font-weight="normal" fill="#404040" text-anchor="start">Verbes des flèches : déposer · agréger · exporter · enrichir · publier · interroger</text>
+</svg>
